@@ -1,0 +1,26 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: "ap-southeast-2"
+
+phases:
+  pre_build:
+    commands:
+      - echo "Setting default region to $AWS_REGION..."
+      - export AWS_DEFAULT_REGION=$AWS_REGION
+      - echo "Logging in to Amazon ECR..."
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+
+  build:
+    commands:
+      - echo "Downloading Alpine Docker image..."
+      - docker pull alpine:latest
+
+      - echo "Building Docker image..."
+      - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/vivekrepo:latest .
+
+  post_build:
+    commands:
+      - echo "Pushing Docker image to Amazon ECR..."
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/vivekrepo:latest
