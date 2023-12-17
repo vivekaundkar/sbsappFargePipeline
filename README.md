@@ -23,3 +23,26 @@ index.html: HTML file with JavaScript code to display IP address and current dat
 show_ip_and_date.js: JavaScript file that fetches the IP address and formats the current date.
 Customization
 Date Format: You can customize the date format in show_ip_and_date.js by modifying the options object in the updateCurrentDate function.
+
+TO create and push docker image to ECR follow below commands
+docker login -u 
+
+setup environment variables with AWS creds and then run
+docker build \
+  --build-arg AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+  --build-arg AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+  --build-arg AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION \
+  -t sbsapp:latest .
+
+Run docker container and test locally using
+docker run -p 8080:80 sbsapp:latest
+
+you can verify web site locally using url
+http://localhost:8080/
+
+Next tag and push this image to ECR
+aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 239338699850.dkr.ecr.ap-southeast-2.amazonaws.com
+
+docker tag sbsapp:latest 239338699850.dkr.ecr.ap-southeast-2.amazonaws.com/vivekrepo:latest
+
+docker push 239338699850.dkr.ecr.ap-southeast-2.amazonaws.com/vivekrepo:latest
