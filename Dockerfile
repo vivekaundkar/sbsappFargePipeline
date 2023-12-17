@@ -24,9 +24,4 @@ COPY show_ip_and_date.js /usr/share/nginx/html/
 EXPOSE 80
 
 # Define the command to run your application
-CMD ["sh", "-c", "aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && \
-                  aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY && \
-                  aws configure set default.region $AWS_DEFAULT_REGION && \
-                  ls && \
-                  aws s3 cp s3://sbsimages/sbs-world-cup.jpeg /usr/share/nginx/html/ && \
-                  nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "nginx -g 'daemon off;'"]
